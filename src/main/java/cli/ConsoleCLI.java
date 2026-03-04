@@ -28,6 +28,7 @@ public class ConsoleCLI {
     public void executeCommand() {
         System.out.println("Справочник единиц и правил их конвертации. Для получения информации о доступных командах введите 'help'");
         while(true) {
+            System.out.print("> ");
             String input = scanner.nextLine().trim();
             if (input.isEmpty()) continue;
 
@@ -137,7 +138,7 @@ public class ConsoleCLI {
     public void executeUnitUpdate() {
         Long id = readLongID();
         while (true) {
-            System.out.println("Введите поле, которое хотите обновить (code или name): ");
+            System.out.print("Введите поле, которое хотите обновить (code или name): ");
             String input = scanner.nextLine().trim();
             String field = input.toLowerCase();
             try {
@@ -171,9 +172,9 @@ public class ConsoleCLI {
     }
 
     public void executeConvAdd() {
-        System.out.println("Введите короткий код конвертируемой единицы(fromUnitCode): ");
+        System.out.print("Введите короткий код конвертируемой единицы(fromUnitCode): ");
         String fromUnitCode = readFromToCode();
-        System.out.println("Введите короткий код единицы, в которую происходит конвертация(toUnitCode): ");
+        System.out.print("Введите короткий код единицы, в которую происходит конвертация(toUnitCode): ");
         String toUnitCode = readFromToCode();
         Double factor = readDoubleFactor();
         String ownerUsername = readOwnerUsername();
@@ -193,9 +194,9 @@ public class ConsoleCLI {
 
     public void executeConvConvert() {
         Double value = readDoubleValue();
-        System.out.println("Введите короткий код конвертируемой единицы(fromCode): ");
+        System.out.print("Введите короткий код конвертируемой единицы(fromCode): ");
         String fromCode = readFromToCode();
-        System.out.println("Введите короткий код единицы, в которую происходит конвертация(toCode): ");
+        System.out.print("Введите короткий код единицы, в которую происходит конвертация(toCode): ");
         String toCode = readFromToCode();
         ValueWithUnit valueWithUnit = conversionRuleCollectionManager.convert(value, fromCode, toCode);
         System.out.println("Result: " + valueWithUnit.getValue() + " " + valueWithUnit.getUnitCode());
@@ -222,7 +223,7 @@ public class ConsoleCLI {
     public String readCode() {
         while (true) {
             try {
-                System.out.println("Введите короткий код единицы(code): ");
+                System.out.print("Введите короткий код единицы(code): ");
                 String code = scanner.nextLine().trim();
                 if (unitCollectionManager.getUnitByCode(code) == null)  {
                     validateCode(code);
@@ -244,6 +245,7 @@ public class ConsoleCLI {
                 } else throw new IllegalArgumentException("Единица с коротким кодом " + code + " не найдена в коллекции");
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
+                System.out.print("Введите единицу с корректным коротким кодом: ");
             }
         }
     }
@@ -251,7 +253,7 @@ public class ConsoleCLI {
     public String readName() {
         while (true) {
             try {
-                System.out.println("Введите человеческое название единицы(name): ");
+                System.out.print("Введите человеческое название единицы(name): ");
                 String name = scanner.nextLine().trim();
                 validateName(name);
                 return name;
@@ -264,7 +266,7 @@ public class ConsoleCLI {
     public String readOwnerUsername() {
         while (true) {
             try {
-                System.out.println("Введите логин(ownerUsername): ");
+                System.out.print("Введите логин(ownerUsername): ");
                 String ownerUsername = scanner.nextLine().trim();
                 validateOwnerUsername(ownerUsername);
                 return ownerUsername;
@@ -276,34 +278,34 @@ public class ConsoleCLI {
 
     private Double readDoubleFactor() {
         while (true) {
-            System.out.println("Введите коэффицент конвертации:");
+            System.out.print("Введите коэффицент конвертации(factor): ");
             String stringFactor = scanner.nextLine().trim();
             try {
                 Double doubleFactor = Double.parseDouble(stringFactor);
                 validateFactor(doubleFactor);
                 return doubleFactor;
-            } catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
+            } catch (NumberFormatException e) {
+                System.out.println("Введённый коэффицент конвертации(factor) должен иметь тип double");
             }
         }
     }
 
     private Double readDoubleValue() {
         while (true) {
-            System.out.println("Введите величину: ");
+            System.out.print("Введите величину(value): ");
             String stringValue = scanner.nextLine().trim();
             try {
                 Double doubleValue = Double.parseDouble(stringValue);
                 return doubleValue;
-            } catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
+            } catch (NumberFormatException e) {
+                System.out.println("Введённая величина(value) должна иметь тип double");
             }
         }
     }
 
     private Long readLongID() {
         while (true) {
-            System.out.println("Введите уникальный номер единицы(ID): ");
+            System.out.print("Введите уникальный номер единицы(ID): ");
             String input = scanner.nextLine().trim();
             try {
                 return Long.parseLong(input);
